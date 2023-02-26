@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { registrations: "registrations" }
+  resource :accounts
+
   get 'activity/mine'
   get 'activity/feed'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
