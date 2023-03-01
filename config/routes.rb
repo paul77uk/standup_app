@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :standups
   devise_for :users, controllers: { registrations: 'registrations' }
   resource :accounts
 
@@ -17,5 +18,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
+
+  get 'dates/:date', to: 'dates#update', as: 'update_date'
+
   root to: 'activity#mine'
 end
