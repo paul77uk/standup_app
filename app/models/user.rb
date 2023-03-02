@@ -7,4 +7,7 @@ class User < ApplicationRecord
 
   belongs_to :account, optional: true
   attr_accessor :role
+
+  has_many :team_memberships
+  has_many :teams, through: :team_memberships
 end
