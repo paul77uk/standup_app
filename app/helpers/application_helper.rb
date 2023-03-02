@@ -21,4 +21,8 @@ module ApplicationHelper
     end
     nil
   end
+
+  def user_avatar_url(email, size)
+    "https://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(email&.downcase || '')}?size=#{size}"
+  end
 end
