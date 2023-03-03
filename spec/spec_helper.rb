@@ -4,6 +4,8 @@ SimpleCov.start 'rails'
 require 'webdrivers'
 require 'capybara/rspec'
 
+browser = ENV['SHOW'] == "1" ? :selenium_chrome : :selenium_chrome_headless
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
@@ -85,9 +87,10 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :system, js: true) do
-    driven_by :selenium_chrome_headless
+    driven_by browser
+    Capybara.page.driver.browser.manage.window.maximize
   end
 end
 
-Capybara.javascript_driver = :selenium_chrome_headless
-Capybara.server = :puma, { Silent: true }
+# Capybara.javascript_driver = :selenium_chrome_headless
+# Capybara.server = :puma, { Silent: true }

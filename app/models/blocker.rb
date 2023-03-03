@@ -1,0 +1,3 @@
+class Blocker < Task
+
+end

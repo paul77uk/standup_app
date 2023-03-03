@@ -7,7 +7,7 @@ class TeamsController < ApplicationController
   end
 
   def show
-    @team = Team.includes(:users).find(params[:id])
+    set_teams_and_standups(Date.today.iso8601)
   end
 
   def new
@@ -21,7 +21,7 @@ class TeamsController < ApplicationController
   end
 
   def create
-    @team = Team.new(team_params.except('days'))
+    @team = Team.new(team_params.except("days"))
     @team.account_id = current_account.id
     @team.days = days
     convert_zone_times_to_utc
@@ -56,10 +56,10 @@ class TeamsController < ApplicationController
   end
 
   private
-
+  
   def team_params
     params.require(:team).permit(:name, :description, :timezone, :has_reminder,
-                                 :has_recap, :reminder_time, :recap_time, days: [], user_ids: [])
+    :has_recap, :reminder_time, :recap_time, :days=> [], :user_ids=> [])
   end
 
   def set_users
@@ -75,19 +75,18 @@ class TeamsController < ApplicationController
     &.map do |day|
       DaysOfTheWeekMembership.new(
         team_id: @team.id,
-        day:
+        day: day
       )
     end || []
   end
 
   def convert_zone_times_to_utc
-    convert_reminder
-    convert_recap
-  end
+      convert_reminder
+      convert_recap
+    end
 
   def convert_reminder
     return nil unless @team.reminder_time && @team.has_reminder
-
     @team.reminder_time =
       ActiveSupport::TimeZone[@team.timezone]
       .parse(@team.reminder_time.to_s[11..18])
@@ -96,7 +95,6 @@ class TeamsController < ApplicationController
 
   def convert_recap
     return nil unless @team.recap_time && @team.has_recap
-
     @team.recap_time =
       ActiveSupport::TimeZone[@team.timezone]
       .parse(@team.recap_time.to_s[11..18])
@@ -106,4 +104,5 @@ class TeamsController < ApplicationController
   def use_time_zone(&block)
     Time.use_zone(@team.timezone, &block)
   end
+
 end

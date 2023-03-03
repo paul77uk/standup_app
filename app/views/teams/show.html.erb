@@ -48,3 +48,26 @@
   </div>
 </div>
 
+<div class="flex justify-center mt-6">
+  <div class="px-4 py-1 w-4/5 bg-white rounded-lg border border-gray-200 shadow-md">
+    <div class="float-right">
+      <%= link_to "See More", team_standups_path(@team) %>
+    </div>
+    <h3 class="card-title"><%= "\"#{@team.name}\"'s Standups Today" %></h3>
+  </div>
+</div>
+
+<div class="flex justify-center">
+  <div class="p-4 w-4/5 sm:p-6 lg:p-8">
+    <div class="grid grid-cols-3 auto-cols-auto gap-4">
+      <% if @standups.empty? %>
+        <div class="row">
+          <div class="col">
+            <p>No standups are available to display</p>
+          </div>
+        </div>
+      <% end %>
+      <%= render partial: 'standups/standup', collection: @standups %>
+    </div>
+  </div>
+</div>

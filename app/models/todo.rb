@@ -1,0 +1,3 @@
+class Todo < Task
+
+end

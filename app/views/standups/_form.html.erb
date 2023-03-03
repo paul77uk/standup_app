@@ -1,27 +1,70 @@
-<%= form_with(model: standup, class: "contents") do |form| %>
-  <% if standup.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
-      <h2><%= pluralize(standup.errors.count, "error") %> prohibited this standup from being saved:</h2>
-
-      <ul>
-        <% standup.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+<%= form_with model: @standup, id: 'team-form', html: {class: 'space-y-6'}  do |f| %>
+  <%= f.hidden_field :standup_date, value: current_date %>
+  <%= render partial: 'layouts/components/date_change', locals: {reload_path: "/s/#{action_name}"} %>
+  <% if @standup.errors.any? %>
+    <div class="text-red-700">
+      <h4>
+        <%= "#{pluralize(@standup.errors.count, "error")} prohibited this team from being saved:" %>
+      </h4>
+      <%== @standup.errors.full_messages.map{|msg|content_tag(:li, msg)}.join %>
     </div>
   <% end %>
+  <h3>
+    What did you do since your last standup?
+  </h3>
+  <div data-controller='nested-form' data-nested-form-wrapper-selector-value='.nested-did'>
+    <template data-nested-form-target="template">
+      <%= f.fields_for :dids, Did.new, child_index: 'NEW_RECORD' do |did| %>
+        <%= render "task_field", f: did, placeholder: 'A thing I did' %>
+      <% end %>
+    </template>
+    <%= f.fields_for :dids do |did| %>
+      <%= render 'task_field', f: did, placeholder: 'A thing I did' %>
+    <% end %>
+    <div data-nested-form-target="target"></div>
 
-  <div class="my-5">
-    <%= form.label :user_id %>
-    <%= form.text_field :user_id, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+    <button type="button" class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-3" data-action="nested-form#add">
+      <%= heroicon 'plus' %>
+    </button>
   </div>
 
-  <div class="my-5">
-    <%= form.label :standup_date %>
-    <%= form.date_field :standup_date, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  <h3>
+    What will I do today?
+  </h3>
+  <div data-controller='nested-form' data-nested-form-wrapper-selector-value='.nested-todo'>
+    <template data-nested-form-target="template">
+      <%= f.fields_for :todos, Todo.new, child_index: 'NEW_RECORD' do |todo| %>
+        <%= render "task_field", f: todo, placeholder: 'A thing I have to do' %>
+      <% end %>
+    </template>
+    <%= f.fields_for :todos do |todo| %>
+      <%= render 'task_field', f: todo, placeholder: 'A thing I have to do' %>
+    <% end %>
+    <div data-nested-form-target="target"></div>
+
+    <button type="button" class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-3" data-action="nested-form#add">
+      <%= heroicon 'plus' %>
+    </button>
   </div>
 
-  <div class="inline">
-    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+  <h3>
+    What blocked you since your last standup?
+  </h3>
+  <div data-controller='nested-form' data-nested-form-wrapper-selector-value='.nested-blocker'>
+    <template data-nested-form-target="template">
+      <%= f.fields_for :blockers, Blocker.new, child_index: 'NEW_RECORD' do |blocker| %>
+        <%= render "task_field", f: blocker, placeholder: 'A thing I was blocked me' %>
+      <% end %>
+    </template>
+    <%= f.fields_for :blockers do |blocker| %>
+      <%= render 'task_field', f: blocker, placeholder: 'A thing that blocked me' %>
+    <% end %>
+    <div data-nested-form-target="target"></div>
+
+    <button type="button" class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-3" data-action="nested-form#add">
+      <%= heroicon 'plus' %>
+    </button>
   </div>
+  <%= f.submit "Save", class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center" %>
 <% end %>
+

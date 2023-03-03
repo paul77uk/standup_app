@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_01_173949) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_02_203632) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -53,6 +53,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_01_173949) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_standups_on_user_id"
+  end
+
+  create_table "task_memberships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "task_id", null: false
+    t.uuid "standup_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["standup_id"], name: "index_task_memberships_on_standup_id"
+    t.index ["task_id"], name: "index_task_memberships_on_task_id"
+  end
+
+  create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "type"
+    t.string "title"
+    t.boolean "is_completed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "team_memberships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -115,6 +132,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_01_173949) do
 
   add_foreign_key "days_of_the_week_memberships", "teams"
   add_foreign_key "standups", "users"
+  add_foreign_key "task_memberships", "standups"
+  add_foreign_key "task_memberships", "tasks"
   add_foreign_key "team_memberships", "teams"
   add_foreign_key "team_memberships", "users"
   add_foreign_key "teams", "accounts"

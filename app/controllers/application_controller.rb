@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_date
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, error: exception.message
+    redirect_to root_url, :error => exception.message
   end
   add_flash_types :error
 
@@ -31,13 +31,21 @@ class ApplicationController < ActionController::Base
     @visible_teams
   end
 
-  protected
+  def set_teams_and_standups(date)
+    @team = Team.includes(:users).find(params[:id])
+    @standups = @team.users.flat_map do |u|
+      u.standups.where(standup_date: date)
+      .includes(:dids, :todos, :blockers)
+      .references(:tasks)
+    end
+  end
 
+  protected
   def layout_by_resource
     if devise_controller?
-      'devise'
+      "devise"
     else
-      'application'
+      "application"
     end
   end
 end
