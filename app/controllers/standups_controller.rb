@@ -6,18 +6,11 @@ class StandupsController < ApplicationController
   end
 
   def new
-    return if check_for_blank_date
-    return if check_for_existance
     @standup = Standup.new
   end
 
   def edit
-    return if check_for_blank_date
-    return if check_for_existance
-    @standup = Standup.find_by(
-      user_id: current_user.id,
-      standup_date: current_date
-    )
+    @standup = Standup.find(params[:id])
   end
 
   # POST /standups
@@ -45,6 +38,15 @@ class StandupsController < ApplicationController
     end
   end
 
+  def destroy
+    @standup = Standup.find(params[:id])
+    @standup.destroy
+    redirect_back(
+        fallback_location: root_path,
+        notice: 'Standup was successfully removed.'
+      )
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -58,27 +60,5 @@ class StandupsController < ApplicationController
     params.require(:standup).permit(:standup_date, dids_attributes:\
       [:id, :title, :_destroy], todos_attributes: [:id, :title, :_destroy],\
       blockers_attributes: [:id, :title, :_destroy])
-  end
-
-  def check_for_blank_date
-    if params[:date].blank?
-      redirect_to(
-        update_date_path(
-          date: Date.today.iso8601,
-          reload_path: "/s/#{action_name}/#{Date.today.iso8601}"
-        )
-      ) and return true
-    end
-  end
-
-  def check_for_existance
-    standup = Standup.find_by(
-      user_id: current_user.id, standup_date: current_date
-    )
-    if standup.present? && action_name == 'new'
-      redirect_to(edit_standup_path(date: current_date)) and return true
-    elsif standup.nil? && action_name == 'edit'
-      redirect_to(new_standup_path(date: current_date)) and return true
-    end
   end
 end

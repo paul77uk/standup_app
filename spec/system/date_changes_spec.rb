@@ -28,16 +28,13 @@ RSpec.describe "DateChanges", type: :system do
   end
 
   it 'should be able to visit standups and move date from picker', js: true do
-    Capybara.page.driver.browser.manage.window.maximize
     visit team_standups_path(team)
 
-    date = (Time.now + 1.day).strftime("%B %d, %Y")
+    date = (Time.now + 1.day).strftime("%B %-d, %Y")
 
     find('#datePicker').click
-    # sleep 1
-    # puts (find('body').native.attribute('outerHTML'))
+
     expect(page).to have_selector(".flatpickr-days")
-    page.save_screenshot(full: true)
     find(".flatpickr-calendar .flatpickr-day[aria-label='#{date}']").click
 
     expect(page).to have_content(
@@ -48,6 +45,3 @@ RSpec.describe "DateChanges", type: :system do
     )
   end
 end
-
-# flatpickr-day[aria-label='April 28, 2022'
-# flatpickr-day aria-label="April 28, 2022

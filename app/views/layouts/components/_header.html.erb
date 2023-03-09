@@ -3,23 +3,13 @@
   <nav aria-label="menu nav" class="bg-gray-800 pt-2 md:pt-1 pb-1 px-1 mt-0 h-auto fixed w-full z-20 top-0">
 
     <div class="flex flex-wrap items-center">
-      <div class="flex flex-shrink md:w-1/3 justify-center md:justify-start text-white">
+      <div class="flex flex-shrink md:w-1/2 justify-center md:justify-start text-white">
         <a href="/" aria-label="Home">
           <span class="text-xl pl-2">Standup App</span>
         </a>
       </div>
 
-      <div class="flex w-full content-center justify-between md:w-1/3 md:justify-center">
-        <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
-          <li class="flex-1 md:flex-none md:mr-3">
-            <a href='/s/new/<%="#{Date.today.iso8601}"%>' class="font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 border border-gray-400 text-gray-400 hover:text-white hover:bg-gray-600 focus:ring-gray-800">
-              Submit a Standup
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="flex w-full pt-2 content-center justify-between md:w-1/3 md:justify-end">
+      <div class="flex w-full pt-2 content-center justify-between md:w-1/2 md:justify-end">
         <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
           <li class="flex-1 md:flex-none md:mr-3">
             <a href="/t" class="inline-block py-2 px-4 text-white no-underline">Teams</a>
@@ -27,13 +17,11 @@
           </li>
           <li class="flex-1 md:flex-none md:mr-3">
             <div data-controller="dropdown" class="relative inline-block">
-              <button data-action="dropdown#toggle click@window->dropdown#hide" class="drop-button text-white py-2 px-2"> 
+              <button id="notification_dropdown" data-action="dropdown#toggle click@window->dropdown#hide" class="drop-button text-white py-2 px-2"> 
                 <%= heroicon 'bell' %></button>
-              <div data-dropdown-target="menu" class="w-64 hidden absolute bg-gray-800 text-white right-0 mt-3 p-3 overflow-auto z-30" data-transition-enter-from="opacity-0 scale-95" data-transition-enter-to="opacity-100 scale-100" data-transition-leave-from="opacity-100 scale-100" data-transition-leave-to="opacity-0 scale-95" id="nav-dropdown">
-                <span class="text-xs text-gray-400">15 Notifications</span>
-                <div class="border border-gray-800"></div>
-                <a href="#" data-action="dropdown#toggle" class="p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block">Some Notification</a>
-                <a href="#" data-action="dropdown#toggle" class="p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block">AnotherSome Notification</a>
+              <%= turbo_stream_from current_user, "notification_standups" %>
+              <div data-dropdown-target="menu" class="w-64 hidden absolute bg-gray-800 text-white right-0 mt-3 p-3 overflow-auto z-30" data-transition-enter-from="opacity-0 scale-95" data-transition-enter-to="opacity-100 scale-100" data-transition-leave-from="opacity-100 scale-100" data-transition-leave-to="opacity-0 scale-95" id="notification_standups">
+                <%= render partial: 'layouts/components/notifications', locals: {notification_standups: notification_standups}%>
               </div>
             </div>
           </li>

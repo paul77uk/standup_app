@@ -1,10 +1,9 @@
-<%= form_with model: @standup, id: 'team-form', html: {class: 'space-y-6'}  do |f| %>
-  <%= f.hidden_field :standup_date, value: current_date %>
-  <%= render partial: 'layouts/components/date_change', locals: {reload_path: "/s/#{action_name}"} %>
+<%= form_with model: @standup, id: 'standup-form', html: {class: 'space-y-6'}  do |f| %>
+  <%= f.hidden_field :standup_date, value: f.object&.standup_date || params[:date] %>
   <% if @standup.errors.any? %>
     <div class="text-red-700">
       <h4>
-        <%= "#{pluralize(@standup.errors.count, "error")} prohibited this team from being saved:" %>
+        <%= "#{pluralize(@standup.errors.count, "error")} prohibited this standup from being saved:" %>
       </h4>
       <%== @standup.errors.full_messages.map{|msg|content_tag(:li, msg)}.join %>
     </div>

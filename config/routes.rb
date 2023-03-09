@@ -22,14 +22,16 @@ Rails.application.routes.draw do
   get 't/:id/(:date)', to: 'teams#show'
   resources :teams, path: 't'
 
-  get 's/new/(:date)', to: 'standups#new', as: 'new_standup'
-  get 's/edit/(:date)', to: 'standups#edit', as: 'edit_standup'
-  resources :standups, path: 's', except: [:new, :edit]
+  resources :standups, path: 's'
 
   get 'activity/mine'
   get 'activity/feed'
 
   get 'dates/:date', to: 'dates#update', as: 'update_date'
+
+  require "sidekiq/web"
+  require 'sidekiq/cron/web'
+  mount Sidekiq::Web, at: "/sidekiq"
 
   root to: 'activity#mine'
 end
