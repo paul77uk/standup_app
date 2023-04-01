@@ -5,7 +5,7 @@ RSpec.describe 'Helps', type: :request do
 
   describe 'GET /index' do
     it 'returns http success' do
-      get '/help/index'
+      get '/help/'
       expect(response).to have_http_status(:success)
     end
   end

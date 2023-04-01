@@ -16,6 +16,9 @@
 require 'simplecov'
 SimpleCov.start 'rails'
 
+require 'webdrivers'
+require 'capybara/rspec'
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
@@ -92,4 +95,14 @@ RSpec.configure do |config|
   #   # test failures related to randomization by passing the same `--seed` value
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
+  config.before(:each, type: :system) do
+    driven_by :rack_test
+  end
+
+  config.before(:each, type: :system, js: true) do
+    driven_by :selenium_chrome_headless
+  end
 end
+
+Capybara.javascript_driver = :selenium_chrome_headless
+Capybara.server = :puma, { Silent: true }

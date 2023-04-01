@@ -65,9 +65,11 @@ group :development, :test do
   gem 'capybara'
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
+  gem 'faker'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
   gem 'simplecov', require: false, group: :test
+  gem 'webdrivers', '~> 5.0', require: false
 end
 
 group :development do

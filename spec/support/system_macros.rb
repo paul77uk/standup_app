@@ -1,9 +1,11 @@
-module RequestMacros
+module SystemMacros
+  include Warden::Test::Helpers
+
   def login_user
     before(:each) do
       @user = FactoryBot.create(:user)
       @user.add_role :user, @user.account
-      sign_in @user
+      login_as(@user, scope: :user)
     end
   end
 
@@ -11,7 +13,7 @@ module RequestMacros
     before(:each) do
       @admin = FactoryBot.create(:user)
       @admin.add_role :admin, @admin.account
-      sign_in @admin
+      login_as(@admin, scope: :user)
     end
   end
 end
