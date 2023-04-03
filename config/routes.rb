@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :standups
   devise_for :users, controllers: { registrations: 'registrations' }
   resource :accounts
   resources :help

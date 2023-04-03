@@ -14,6 +14,9 @@
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
           <tr>
               <th scope="col" class="px-6 py-3">
+                  Title
+              </th>
+              <th scope="col" class="px-6 py-3">
                   Email
               </th>
               <th scope="col" class="px-6 py-3">
@@ -32,6 +35,7 @@
       <tbody>
         <% @users.each do |user|%>
           <tr class="bg-white border-b">
+          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"><%= user.title %></th>
             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"><%= user.email %></th>
             <td class="px-6 py-4"><%= user.accepted_or_not_invited? ? "Active" : "Invited" %></td>
             <td class="px-6 py-4"><%= user.roles&.first&.name&.capitalize %></td>
