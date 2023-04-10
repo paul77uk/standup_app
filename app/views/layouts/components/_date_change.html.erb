@@ -1,0 +1,27 @@
+<div class="flex flex-row m-auto p-5">
+  <div class="basis-1/4">
+    <div class="w-6 ml-auto">
+     <%= link_to update_date_path(date: Date.parse(current_date) - 1.day), id: 'date_backwards', class: '' do %>
+        <%= heroicon "arrow-left", class: 'inline' %>
+      <% end %>
+    </div>
+  </div>
+  <div class="basis-1/2">
+    <div class="text-center" data-controller="flatpickr" data-flatpickr-wrap="true" id="datePicker">
+      <input id="datePickerInput" type="text" name="current_date" value="<%= current_date %>" style="visibility:hidden;height:.5px;width:.5px;" data-input/>
+      <div data-toggle class="inline cursor-pointer">
+        <%= heroicon "calendar", class: 'inline' %>
+        <h3 class="ml-3 inline">
+          <%= Date.parse(current_date).strftime("%a, %b  #{Date.parse(current_date).day.ordinalize}") %>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <div class="basis-1/4 text-left">
+    <div class="w-6 mr-auto">
+      <%= link_to update_date_path(date: Date.parse(current_date) + 1.day), id: 'date_forward' do %>
+        <%= heroicon "arrow-right", class: 'inline' %>
+      <% end %>
+    </div>
+  </div>
+</div>

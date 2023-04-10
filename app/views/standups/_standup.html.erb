@@ -1,17 +1,30 @@
-<div id="<%= dom_id standup %>">
-  <p class="my-5">
-    <strong class="block font-medium mb-1">User:</strong>
-    <%= standup.user_id %>
-  </p>
+<div id="<%= dom_id standup %>" class="w-96 block p-6 bg-white rounded-lg border border-gray-200 shadow-md">
+  <div>
+    <div class="float-right">
+      <%= link_to edit_standup_path(standup) do %>
+        <%= heroicon "pencil-square", class: 'inline' %>
+      <% end %>
+    </div>
+    <h3 class="font-bold leading-tight text-gray-900 text-xl"><%= standup_header standup%></h3>
+  </div>
+  <h4 class="mt-4 font-bold leading-tight text-gray-900 text-lg">Dids</h4>
+  <ul>
+    <% standup.dids.each do |did| %>
+      <li class="bg-gray-300 border border-gray-100 p-2 rounded shadow-sm"> <%= did.title %> </li>
+    <% end %>
+  </ul>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Standup date:</strong>
-    <%= standup.standup_date %>
-  </p>
+  <h4 class="mt-4 font-bold leading-tight text-gray-900 text-lg">Todos</h4>
+  <ul>
+    <% standup.todos.each do |todo| %>
+      <li class="bg-gray-300 border border-gray-100 p-2 rounded shadow-sm"> <%= todo.title %> </li>
+    <% end %>
+  </ul>
 
-  <% if action_name != "show" %>
-    <%= link_to "Show this standup", standup, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <%= link_to 'Edit this standup', edit_standup_path(standup), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
-    <hr class="mt-6">
-  <% end %>
+  <h4 class="mt-4 font-bold leading-tight text-gray-900 text-lg">Blockers</h4>
+  <ul>
+    <% standup.blockers.each do |blocker| %>
+      <li class="bg-gray-300 border border-gray-100 p-2 rounded shadow-sm"> <%= blocker.title %> </li>
+    <% end %>
+  </ul>
 </div>

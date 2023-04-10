@@ -68,8 +68,9 @@ group :development, :test do
   gem 'faker'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
+  gem 'shoulda-matchers'
   gem 'simplecov', require: false, group: :test
-  gem 'webdrivers', '~> 5.0', require: false
+  gem 'webdrivers', require: false
 end
 
 group :development do
@@ -87,4 +88,5 @@ end
 
 gem 'rack-cors', require: 'rack/cors'
 
-gem "tailwindcss-rails", "~> 2.0"
+gem 'rails_heroicon'
+gem 'tailwindcss-rails', '~> 2.0'
