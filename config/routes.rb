@@ -33,5 +33,9 @@ Rails.application.routes.draw do
 
   get 'help', to: 'help#index'
 
+  require "sidekiq/web"
+  require 'sidekiq/cron/web'
+  mount Sidekiq::Web, at: "/sidekiq"
+
   root to: 'activity#mine'
 end
