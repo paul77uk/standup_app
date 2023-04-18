@@ -4,9 +4,10 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_account
   helper_method :current_date
+  helper_method :notification_standups
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, :error => exception.message
+    redirect_to root_url, error: exception.message
   end
   add_flash_types :error
 
@@ -35,17 +36,22 @@ class ApplicationController < ActionController::Base
     @team = Team.includes(:users).find(params[:id])
     @standups = @team.users.flat_map do |u|
       u.standups.where(standup_date: date)
-      .includes(:dids, :todos, :blockers)
-      .references(:tasks)
+       .includes(:dids, :todos, :blockers)
+       .references(:tasks)
     end
   end
 
+  def notification_standups
+    Standup.notification_standups(current_user)
+  end
+
   protected
+
   def layout_by_resource
     if devise_controller?
-      "devise"
+      'devise'
     else
-      "application"
+      'application'
     end
   end
 end

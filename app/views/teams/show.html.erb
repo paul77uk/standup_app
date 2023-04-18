@@ -26,7 +26,7 @@
         <% end %>
       <% end %>
     </div>
-    <h3 id="team-settings"><%=@team.name %> Team Settings</h3>
+    <h3 id="team-settings"><%= @team.name %> Team Settings</h3>
     <p>
       <span>Users:</span>
       <%= @team.users.map(&:email).join(", ") %>
@@ -59,13 +59,22 @@
 
 <div class="flex justify-center">
   <div class="p-4 w-4/5 sm:p-6 lg:p-8">
-    <div class="grid grid-cols-3 auto-cols-auto gap-4">
-      <% if @standups.empty? %>
-        <div class="row">
-          <div class="col">
+  <%= turbo_stream_from @team, Date.today.iso8601, "standups" %>
+    <div class="grid grid-cols-3 auto-cols-auto gap-4" id="<%= "#{@team.id}_#{Date.today.iso8601}_standups" %>">
+      <% unless current_user.standups.where(standup_date: Date.today).size > 0 %>
+        <% if @standups.empty? %>
+          <div class="py-8">
             <p>No standups are available to display</p>
           </div>
-        </div>
+        <% end %>
+        <%= turbo_frame_tag Standup.new, class:"w-96 block p-6 bg-white rounded-lg border border-gray-200 shadow-md" do %>
+          
+
+          <%= link_to "Add a Standup",
+                  new_standup_path(date: Date.today.iso8601),
+                  class: "font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 border border-gray-400 text-gray-400 hover:text-white hover:bg-gray-600 focus:ring-gray-800",
+                  data: { turbo_frame: dom_id(Standup.new) } %>
+        <% end %>
       <% end %>
       <%= render partial: 'standups/standup', collection: @standups %>
     </div>

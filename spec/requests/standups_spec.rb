@@ -29,7 +29,7 @@ RSpec.describe "/standups", type: :request do
   describe 'GET #new' do
     it 'redirects without a date' do
       get new_standup_path, params: {}
-      expect(response).to have_http_status(302)
+      expect(response).to have_http_status(200)
     end
   end
 
@@ -40,27 +40,11 @@ RSpec.describe "/standups", type: :request do
     end
   end
 
-  describe 'GET #new redirect to edit on existance' do
-    it 'it redirects' do
-      standup = FactoryBot.create(:standup, valid_attributes)
-      get new_standup_path, params: { date: standup.standup_date }
-      expect(response).to redirect_to(edit_standup_path(date: standup.standup_date))
-    end
-  end
-
   describe 'GET #edit' do
     it 'assigns the requested standup as @standup' do
       standup = FactoryBot.create(:standup, valid_attributes)
-      get edit_standup_path(standup), params: { date: standup.standup_date }
+      get edit_standup_path(standup), params: { id: standup.id }
       expect(assigns(:standup)).to eq(standup)
-    end
-  end
-
-  describe 'GET #edit redirect to new on non-existance' do
-    it 'it redirects' do
-      date = Date.today.iso8601
-      get edit_standup_path(), params: { date: date }
-      expect(response).to redirect_to("/s/new/#{date}")
     end
   end
 
@@ -128,5 +112,24 @@ RSpec.describe "/standups", type: :request do
         expect(response).to redirect_to(root_path)
       end
     end
+  end
+
+  describe 'DELETE #destory' do
+    let(:new_attributes) do
+      { standup_date: Date.tomorrow.iso8601 }
+    end
+
+    it 'updates the requested standup' do
+      standup = FactoryBot.create(:standup, valid_attributes)
+      expect do
+        delete( standup_path(standup), )
+      end.to change(Standup, :count).by(-1)
+    end
+
+      it 'updates the requested standup' do
+        standup = FactoryBot.create(:standup, valid_attributes)
+        delete( standup_path(standup), )
+        expect(response).to redirect_to(root_path)
+      end
   end
 end

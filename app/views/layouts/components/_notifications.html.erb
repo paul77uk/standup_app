@@ -1,0 +1,7 @@
+<span class="text-xs text-gray-400"><%= notification_standups.count %> Notifications</span>
+<div class="border border-gray-800"></div>
+<% if notification_standups.count > 0 %>
+  <% notification_standups.each do |standup| %>
+    <a href="#" class="p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block"><%= standup.user.name %> has a new Standup from <%= standup.standup_date %></a>
+  <% end %>
+<% end %>

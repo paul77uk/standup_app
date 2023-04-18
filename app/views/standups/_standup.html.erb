@@ -1,11 +1,16 @@
-<div id="<%= dom_id standup %>" class="w-96 block p-6 bg-white rounded-lg border border-gray-200 shadow-md">
+<%= turbo_frame_tag dom_id(standup), class:"w-96 block p-6 bg-white rounded-lg border border-gray-200 shadow-md" do %>
   <div>
     <div class="float-right">
-      <%= link_to edit_standup_path(standup) do %>
-        <%= heroicon "pencil-square", class: 'inline' %>
+      <% if standup.user_id == local_assigns[:user]&.id %>
+        <%= link_to edit_standup_path(standup) do %>
+          <%= heroicon "pencil-square", class: 'inline' %>
+        <% end %>
+        <%= button_to standup_path(standup), {form_class: 'inline', method: :delete, form: {data: { turbo_confirm: "Are you sure? Deleting this standup is permanent"}}} do %>
+          <%= heroicon "trash", class: 'inline' %>
+        <% end %>
       <% end %>
     </div>
-    <h3 class="font-bold leading-tight text-gray-900 text-xl"><%= standup_header standup%></h3>
+    <h3 class="font-bold leading-tight text-gray-900 text-xl"><%== standup_header standup, local_assigns[:caller]%></h3>
   </div>
   <h4 class="mt-4 font-bold leading-tight text-gray-900 text-lg">Dids</h4>
   <ul>
@@ -27,4 +32,4 @@
       <li class="bg-gray-300 border border-gray-100 p-2 rounded shadow-sm"> <%= blocker.title %> </li>
     <% end %>
   </ul>
-</div>
+<% end %>

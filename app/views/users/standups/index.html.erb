@@ -34,7 +34,8 @@
 
 <div class="flex justify-center">
   <div class="p-4 w-4/5 sm:p-6 lg:p-8">
-    <div class="grid grid-cols-3 auto-cols-auto gap-4">
+    <%= turbo_stream_from @user, "standups" %>
+    <div class="grid grid-cols-3 auto-cols-auto gap-4" id="<%= dom_id(@user, 'standups') %>">
       <% if @standups.empty? %>
         <div class="row">
           <div class="col">
@@ -42,7 +43,7 @@
           </div>
         </div>
       <% end %>
-      <%= render partial: 'standups/standup', collection: @standups %>
+      <%= render partial: 'standups/standup', collection: @standups, locals: {user: current_user} %>
     </div>
   </div>
 </div>

@@ -77,3 +77,8 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+def check_turbo_and_sleep
+  expect(page).to have_selector('turbo-cable-stream-source', visible: false)
+  sleep 0.25
+end
